@@ -1,0 +1,15 @@
+MenuBegin
+	WindowBegin
+		Button(But1, 0, 255, 0, 255, 0, 0, 100, 100, 0)
+		Button(But2, 100, 10, 255, 255, 0, 0, 100, 130, 1)
+		Button(But3, 100, 100, 100, 255, 0, 0, 100, 160, 0)
+	WindowEnd
+	WindowBegin
+		Button(But1, 0, 30, 255, 255, 0, 0, 200, 130, 0)
+		Button(But2, 90, 0, 255, 255, 0, 0, 200, 160, 2)
+	WindowEnd
+	WindowBegin
+		Button(But1, 40, 0, 50, 255, 0, 0, 300, 160, 0)
+		Button(But2, 70, 255, 255, 255, 0, 0, 300, 190, 0)
+	WindowEnd
+MenuEnd

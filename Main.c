@@ -3,11 +3,7 @@
 ///////////////////////////////////// глобальные переменные
 char szClassName[] = "Window1";
 HWND hWnd;
-WINDOW* Window;
-int NumWindow = 0,
-	NumButtton = 0,
-	k = 1;
-int* WinDraws;
+
 ///////////////////////////////////// прототипы функций
 LRESULT CALLBACK WndProc(HWND, UINT, UINT, LONG);
 
@@ -18,17 +14,20 @@ int createMyWindow(HINSTANCE hInstance, int nCmdShow);
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpszCmdParam, _In_ int nCmdShow)
 {
-	Window = SystemOpen();
-	Window = Reader(Window);
-	WinDraws = malloc(10 * sizeof(int));
-	if (WinDraws == NULL)
+	//Window = SystemOpen();
+	Window = Reader();
+	CWB.k = 1;
+	CWB.NumButton = 0;
+	CWB.NumWindow = 0;
+	CWB.WinDraws = malloc(10 * sizeof(int));
+	if (CWB.WinDraws == NULL)
 	{
 		printf("ERROR");
 		exit(1);
 	}
-	WinDraws[0] = 0;
+	CWB.WinDraws[0] = 0;
 	for (int i = 1; i < 10; i++)
-		WinDraws[i] = -1;
+		CWB.WinDraws[i] = -1;
 
 	createMyWindow(hInstance, nCmdShow);
 
@@ -55,38 +54,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		PAINTSTRUCT ps;
 		HDC hdc = BeginPaint(hWnd, &ps);
-		HPEN OldPen, BlackPen, BluePen;
-		HBRUSH Brush;
-
-		BlackPen = CreatePen(PS_SOLID, 2, RGB(0, 0, 0));
-		BluePen = CreatePen(PS_SOLID, 2, RGB(0, 0, 255));
-		OldPen = (HPEN)SelectObject(hdc, BlackPen);
-		for (int i = 0; i <= k; i++)
-		{
-			for (int j = 0; WinDraws[i] != -1 && j < Window[WinDraws[i]].CountButton; j++)
-			{
-				Brush = CreateSolidBrush(RGB(Window[WinDraws[i]].Button[j].color.R, Window[WinDraws[i]].Button[j].color.G, Window[WinDraws[i]].Button[j].color.B));
-				SelectObject(hdc, Brush);
-				//OldPen = (HPEN)SelectObject(hdc, BlackPen);
-				if (NumWindow == WinDraws[i] && j == NumButtton)
-				{
-					
-					Brush = CreateSolidBrush(RGB(Window[WinDraws[i]].Button[j].HighlightColor.R, Window[WinDraws[i]].Button[j].HighlightColor.G, Window[WinDraws[i]].Button[j].HighlightColor.B));
-					SelectObject(hdc, Brush);
-					Rectangle(hdc, Window[WinDraws[i]].Button[j].position.x, Window[WinDraws[i]].Button[j].position.y, Window[WinDraws[i]].Button[j].position.x + 100, Window[WinDraws[i]].Button[j].position.y + 30);
-					SetBkColor(hdc, RGB(Window[WinDraws[i]].Button[j].HighlightColor.R, Window[WinDraws[i]].Button[j].HighlightColor.G, Window[WinDraws[i]].Button[j].HighlightColor.B));
-					TextOutA(hdc, Window[WinDraws[i]].Button[j].position.x + 2, Window[WinDraws[i]].Button[j].position.y + 2, Window[WinDraws[i]].Button[j].name, strlen(Window[WinDraws[i]].Button[j].name));
-					DeleteObject(Brush);
-					continue;
-				}
-				Rectangle(hdc, Window[WinDraws[i]].Button[j].position.x, Window[WinDraws[i]].Button[j].position.y, Window[WinDraws[i]].Button[j].position.x + 100, Window[WinDraws[i]].Button[j].position.y + 30);
-				SetBkColor(hdc, RGB(Window[WinDraws[i]].Button[j].color.R, Window[WinDraws[i]].Button[j].color.G, Window[WinDraws[i]].Button[j].color.B));
-				TextOutA(hdc, Window[WinDraws[i]].Button[j].position.x + 2, Window[WinDraws[i]].Button[j].position.y + 2, Window[WinDraws[i]].Button[j].name, strlen(Window[WinDraws[i]].Button[j].name));
-				DeleteObject(Brush);
-				
-			}
-		}
-
+		DrawMenu(hdc);
 		EndPaint(hWnd, &ps);
 	}
 	case WM_KEYDOWN:
@@ -95,36 +63,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 		case VK_DOWN:
 		{
-			if (NumButtton < Window[NumWindow].CountButton - 1)
-			{
-				NumButtton++;
-				if (Window[NumWindow].Button[NumButtton].Binding != 0)
-				{
-					WinDraws[k] = Window[NumWindow].Button[NumButtton].Binding;
-				}
-				else
-				{
-					WinDraws[k] = -1;
-				}
-				InvalidateRect(hWnd, NULL, TRUE);
-			}
-			
+			Down();
+			InvalidateRect(hWnd, NULL, TRUE);
 			break;
 		}
 		case VK_UP:
 		{
-
-			if (NumButtton > 0)
+			if (CWB.NumButton > 0)
 			{
-				NumButtton--;
-				if (Window[NumWindow].Button[NumButtton].Binding != 0)
-				{
-					WinDraws[k] = Window[NumWindow].Button[NumButtton].Binding;
-				}
-				else
-				{
-					WinDraws[k] = -1;
-				}
+				Up();
 				InvalidateRect(hWnd, NULL, TRUE);
 			}
 			break;
@@ -132,52 +79,26 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		case VK_RIGHT:
 		{
 
-			if (Window[NumWindow].Button[NumButtton].Binding != 0)
+			if (Window[CWB.NumWindow].Button[CWB.NumButton].Binding != 0)
 			{
-				WinDraws[k] = Window[NumWindow].Button[NumButtton].Binding;
-				NumWindow = Window[NumWindow].Button[NumButtton].Binding;
-				NumButtton = 0;
-				k++;
-				if (Window[NumWindow].Button[NumButtton].Binding != 0)
-				{
-					WinDraws[k] = Window[NumWindow].Button[NumButtton].Binding;
-				}
-				else
-				{
-					WinDraws[k] = -1;
-				}
+				Right();
 				InvalidateRect(hWnd, NULL, TRUE);
 			}
-
-
 			break;
 		}
 		case VK_LEFT:
 		{
 
-			if (NumButtton == 0 && NumWindow != 0)
+			if (CWB.NumButton == 0 && CWB.NumWindow != 0)
 			{
-				WinDraws[k - 1] = -1;
-				NumButtton = 0;
-				for (int i = 0; Window[WinDraws[k - 2]].Button[i].Binding != NumWindow; i++)
-					NumButtton++;
-				NumWindow = WinDraws[k - 2];
-				k--;
-				if (Window[NumWindow].Button[NumButtton].Binding != 0)
-				{
-					WinDraws[k] = Window[NumWindow].Button[NumButtton].Binding;
-				}
-				else
-				{
-					WinDraws[k] = -1;
-				}
+				Left();
 				InvalidateRect(hWnd, NULL, TRUE);
 			}
 			break;
 		}
 		case VK_RETURN:
 		{
-			MessageBox(hWnd, Window[NumWindow].Button[NumButtton].name, NULL, MB_OK);
+			MessageBox(hWnd, Window[CWB.NumWindow].Button[CWB.NumButton].name, NULL, MB_OK);
 			break;
 		}
 		default:

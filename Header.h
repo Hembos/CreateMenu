@@ -1,13 +1,6 @@
 #pragma once
 #include <string.h>
-
-typedef enum
-{
-	MENUBEGIN,
-	WINDOWBEGIN,
-	WINDOWEND,
-	MENUEND
-} MENU;
+#include <Windows.h>
 
 typedef struct
 {
@@ -34,10 +27,26 @@ typedef struct
 typedef struct
 {
 	BUTTON* Button;
-	int CountWindow;
 	int CountButton;
 } WINDOW;
 
-WINDOW* SystemOpen();
-void SystemClose(WINDOW* Window);
-WINDOW* Reader(WINDOW* Window);
+typedef struct
+{
+	int NumWindow, //=0
+		NumButton,//=0
+		k;//=1
+	int* WinDraws;
+} CurrentWinBut;
+
+CurrentWinBut CWB;
+
+WINDOW* Window;
+
+//WINDOW* SystemOpen();
+void SystemClose();
+WINDOW* Reader();
+void DrawMenu(HDC hdc);
+void Down();
+void Up();
+void Right();
+void Left();

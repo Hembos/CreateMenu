@@ -5,43 +5,19 @@
 #include "Header.h"
 
 int length = 0;
+int CountWindow = 0;
 
-WINDOW* SystemOpen()
+typedef enum
 {
-	WINDOW* Window;
+	MENUBEGIN,
+	WINDOWBEGIN,
+	WINDOWEND,
+	MENUEND
+} MENU;
 
-	Window = malloc(10 * sizeof(WINDOW));
-	if (Window == NULL)
-	{
-		printf("ERROR");
-		exit(1);
-	}
-	for (int i = 0; i < 10; i++)
-	{
-		Window[i].CountButton = 0;
-		Window[i].Button = malloc(10 * sizeof(BUTTON));
-		if (Window[i].Button == NULL)
-		{
-			printf("ERROR");
-			exit(1);
-		}
-		for (int j = 0; j < 10; j++)
-		{
-			Window[i].Button[j].name = malloc(100 * sizeof(char));
-			if (Window[i].Button[j].name == NULL)
-			{
-				printf("ERROR");
-				exit(1);
-			}
-		}
-	}
-	Window->CountWindow = 0;
-	return Window;
-}
-
-void SystemClose(WINDOW* Window)
+void SystemClose()
 {
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < CountWindow; i++)
 	{
 		free(Window[i].Button);
 	}
@@ -107,6 +83,11 @@ char* Name(char* str)
 	char* Name;
 	int i;
 	Name = malloc(100 * sizeof(char));
+	if (Name == NULL)
+	{
+		printf("ERROR");
+		exit(1);
+	}
 	for (; *str != '(';)
 		str++;
 	str++;
@@ -141,11 +122,12 @@ char* ReverseShift(char* str)
 	return str;
 }
 
-WINDOW* Reader(WINDOW* Window)
+WINDOW* Reader()
 {
 	FILE* fp;
 	int kindCom;
 	char* str;
+
 	str = malloc(1024 * sizeof(char));
 	if (str == NULL)
 	{
@@ -159,6 +141,14 @@ WINDOW* Reader(WINDOW* Window)
 		exit(1);
 	}
 
+	Window = malloc(sizeof(WINDOW));
+	if (Window == NULL)
+	{
+		printf("ERROR");
+		exit(1);
+	}
+
+
 	fgets(str, 1024, fp);
 	str = DeleteSpace(str);
 	kindCom = CommandName(str);
@@ -171,42 +161,64 @@ WINDOW* Reader(WINDOW* Window)
 			kindCom = CommandName(str);
 			if (kindCom == 3)
 				break;
+			Window = realloc(Window, (CountWindow + 1) * sizeof(WINDOW));
+			if (Window == NULL)
+			{
+				printf("ERROR");
+				exit(1);
+			}
+			Window[CountWindow].Button = malloc(sizeof(BUTTON));
+			if (Window[CountWindow].Button == NULL)
+			{
+				printf("ERROR");
+				exit(1);
+			}
+			Window[CountWindow].CountButton = 0;
 			while (kindCom != 2)
 			{
+				
 				fgets(str, 1024, fp);
 				str = DeleteSpace(str);
 				kindCom = CommandName(str);
+				Window[CountWindow].Button = realloc(Window[CountWindow].Button, (Window[CountWindow].CountButton + 1) * sizeof(BUTTON));
+				if (Window[CountWindow].Button == NULL)
+				{
+					printf("ERROR");
+					exit(1);
+				}
+
 				if (kindCom != 2)
 				{
-					Window[Window->CountWindow].Button[Window[Window->CountWindow].CountButton].name = Name(str);
+					Window[CountWindow].Button[Window[CountWindow].CountButton].name = Name(str);
 					str = ShiftPointer(str);
 
-					Window[Window->CountWindow].Button[Window[Window->CountWindow].CountButton].color.R = Numbers(str);
+					Window[CountWindow].Button[Window[CountWindow].CountButton].color.R = Numbers(str);
 					str = ShiftPointer(str);
-					Window[Window->CountWindow].Button[Window[Window->CountWindow].CountButton].color.G = Numbers(str);
+					Window[CountWindow].Button[Window[CountWindow].CountButton].color.G = Numbers(str);
 					str = ShiftPointer(str);
-					Window[Window->CountWindow].Button[Window[Window->CountWindow].CountButton].color.B = Numbers(str);
-					str = ShiftPointer(str);
-
-					Window[Window->CountWindow].Button[Window[Window->CountWindow].CountButton].HighlightColor.R = Numbers(str);
-					str = ShiftPointer(str);
-					Window[Window->CountWindow].Button[Window[Window->CountWindow].CountButton].HighlightColor.G = Numbers(str);
-					str = ShiftPointer(str);
-					Window[Window->CountWindow].Button[Window[Window->CountWindow].CountButton].HighlightColor.B = Numbers(str);
+					Window[CountWindow].Button[Window[CountWindow].CountButton].color.B = Numbers(str);
 					str = ShiftPointer(str);
 
-					Window[Window->CountWindow].Button[Window[Window->CountWindow].CountButton].position.x = Numbers(str);
+					Window[CountWindow].Button[Window[CountWindow].CountButton].HighlightColor.R = Numbers(str);
 					str = ShiftPointer(str);
-					Window[Window->CountWindow].Button[Window[Window->CountWindow].CountButton].position.y = Numbers(str);
+					Window[CountWindow].Button[Window[CountWindow].CountButton].HighlightColor.G = Numbers(str);
+					str = ShiftPointer(str);
+					Window[CountWindow].Button[Window[CountWindow].CountButton].HighlightColor.B = Numbers(str);
 					str = ShiftPointer(str);
 
-					Window[Window->CountWindow].Button[Window[Window->CountWindow].CountButton].Binding = Numbers(str);
+					Window[CountWindow].Button[Window[CountWindow].CountButton].position.x = Numbers(str);
+					str = ShiftPointer(str);
+					Window[CountWindow].Button[Window[CountWindow].CountButton].position.y = Numbers(str);
+					str = ShiftPointer(str);
+
+					Window[CountWindow].Button[Window[CountWindow].CountButton].Binding = Numbers(str);
 					str = ReverseShift(str);
 
-					Window[Window->CountWindow].CountButton++;
+					Window[CountWindow].CountButton++;
 				}
 			}
-			Window->CountWindow++;
+			CountWindow++;
+
 		}
 	}
 	else

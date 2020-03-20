@@ -38,15 +38,10 @@ typedef struct
 	int* WinDraws;
 } CurrentWinBut;
 
-CurrentWinBut CWB;
-
-WINDOW* Window;
-
-//WINDOW* SystemOpen();
 void SystemClose();
 WINDOW* Reader();
 void DrawMenu(HDC hdc);
-void Down();
-void Up();
-void Right();
-void Left();
+CurrentWinBut Down();
+CurrentWinBut Up();
+CurrentWinBut Right();
+CurrentWinBut Left();

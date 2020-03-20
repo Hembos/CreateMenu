@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include "Header.h"
 
+WINDOW* Window;
 int length = 0;
 int CountWindow = 0;
 
@@ -82,7 +83,7 @@ char* Name(char* str)
 {
 	char* Name;
 	int i;
-	Name = malloc(100 * sizeof(char));
+	Name = malloc(sizeof(char));
 	if (Name == NULL)
 	{
 		printf("ERROR");
@@ -93,6 +94,7 @@ char* Name(char* str)
 	str++;
 	for (i = 0; *str != ','; i++)
 	{
+		Name = realloc(Name, (i + 1) * sizeof(char));
 		Name[i] = *str;
 		str++;
 	}

@@ -1,4 +1,6 @@
 #include "Header.h"
+CurrentWinBut CWB;
+WINDOW* Window;
 
 void DrawMenu(HDC hdc)
 {
@@ -34,7 +36,7 @@ void DrawMenu(HDC hdc)
 	}
 }
 
-void Down()
+CurrentWinBut Down()
 {
 	if (CWB.NumButton < Window[CWB.NumWindow].CountButton - 1)
 	{
@@ -48,9 +50,10 @@ void Down()
 			CWB.WinDraws[CWB.k] = -1;
 		}
 	}
+	return CWB;
 }
 
-void Up()
+CurrentWinBut Up()
 {
 	CWB.NumButton--;
 	if (Window[CWB.NumWindow].Button[CWB.NumButton].Binding != 0)
@@ -61,9 +64,10 @@ void Up()
 	{
 		CWB.WinDraws[CWB.k] = -1;
 	}
+	return CWB;
 }
 
-void Right()
+CurrentWinBut Right()
 {
 	CWB.WinDraws[CWB.k] = Window[CWB.NumWindow].Button[CWB.NumButton].Binding;
 	CWB.NumWindow = Window[CWB.NumWindow].Button[CWB.NumButton].Binding;
@@ -77,9 +81,10 @@ void Right()
 	{
 		CWB.WinDraws[CWB.k] = -1;
 	}
+	return CWB;
 }
 
-void Left()
+CurrentWinBut Left()
 {
 	CWB.WinDraws[CWB.k - 1] = -1;
 	CWB.NumButton = 0;
@@ -95,4 +100,5 @@ void Left()
 	{
 		CWB.WinDraws[CWB.k] = -1;
 	}
+	return CWB;
 }

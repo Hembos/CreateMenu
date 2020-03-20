@@ -3,7 +3,8 @@
 ///////////////////////////////////// глобальные переменные
 char szClassName[] = "Window1";
 HWND hWnd;
-
+CurrentWinBut CWB;
+WINDOW* Window;
 ///////////////////////////////////// прототипы функций
 LRESULT CALLBACK WndProc(HWND, UINT, UINT, LONG);
 
@@ -63,7 +64,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 		case VK_DOWN:
 		{
-			Down();
+			CWB = Down();
 			InvalidateRect(hWnd, NULL, TRUE);
 			break;
 		}
@@ -71,7 +72,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			if (CWB.NumButton > 0)
 			{
-				Up();
+				CWB = Up();
 				InvalidateRect(hWnd, NULL, TRUE);
 			}
 			break;
@@ -81,7 +82,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			if (Window[CWB.NumWindow].Button[CWB.NumButton].Binding != 0)
 			{
-				Right();
+				CWB = Right();
 				InvalidateRect(hWnd, NULL, TRUE);
 			}
 			break;
@@ -91,7 +92,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			if (CWB.NumButton == 0 && CWB.NumWindow != 0)
 			{
-				Left();
+				CWB = Left();
 				InvalidateRect(hWnd, NULL, TRUE);
 			}
 			break;

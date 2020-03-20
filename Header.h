@@ -40,8 +40,8 @@ typedef struct
 
 void SystemClose();
 WINDOW* Reader();
-void DrawMenu(HDC hdc, CurrentWinBut CWB, WINDOW* Window);
-CurrentWinBut Down(CurrentWinBut CWB, WINDOW* Window);
-CurrentWinBut Up(CurrentWinBut CWB, WINDOW* Window);
-CurrentWinBut Right(CurrentWinBut CWB, WINDOW* Window);
-CurrentWinBut Left(CurrentWinBut CWB, WINDOW* Window);
+void DrawMenu(HDC hdc);
+CurrentWinBut Down();
+CurrentWinBut Up();
+CurrentWinBut Right();
+CurrentWinBut Left();

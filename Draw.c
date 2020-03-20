@@ -1,6 +1,6 @@
 #include "Header.h"
 
-void DrawMenu(HDC hdc, CurrentWinBut CWB, WINDOW* Window)
+void DrawMenu(HDC hdc)
 {
 	HPEN OldPen, BlackPen, BluePen;
 	HBRUSH Brush;
@@ -34,7 +34,7 @@ void DrawMenu(HDC hdc, CurrentWinBut CWB, WINDOW* Window)
 	}
 }
 
-CurrentWinBut Down(CurrentWinBut CWB, WINDOW* Window)
+CurrentWinBut Down()
 {
 	if (CWB.NumButton < Window[CWB.NumWindow].CountButton - 1)
 	{
@@ -51,7 +51,7 @@ CurrentWinBut Down(CurrentWinBut CWB, WINDOW* Window)
 	return CWB;
 }
 
-CurrentWinBut Up(CurrentWinBut CWB, WINDOW* Window)
+CurrentWinBut Up()
 {
 	CWB.NumButton--;
 	if (Window[CWB.NumWindow].Button[CWB.NumButton].Binding != 0)
@@ -65,7 +65,7 @@ CurrentWinBut Up(CurrentWinBut CWB, WINDOW* Window)
 	return CWB;
 }
 
-CurrentWinBut Right(CurrentWinBut CWB, WINDOW* Window)
+CurrentWinBut Right()
 {
 	CWB.WinDraws[CWB.k] = Window[CWB.NumWindow].Button[CWB.NumButton].Binding;
 	CWB.NumWindow = Window[CWB.NumWindow].Button[CWB.NumButton].Binding;
@@ -82,7 +82,7 @@ CurrentWinBut Right(CurrentWinBut CWB, WINDOW* Window)
 	return CWB;
 }
 
-CurrentWinBut Left(CurrentWinBut CWB, WINDOW* Window)
+CurrentWinBut Left()
 {
 	CWB.WinDraws[CWB.k - 1] = -1;
 	CWB.NumButton = 0;

@@ -55,7 +55,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		PAINTSTRUCT ps;
 		HDC hdc = BeginPaint(hWnd, &ps);
-		DrawMenu(hdc, CWB, Window);
+		DrawMenu(hdc);
 		EndPaint(hWnd, &ps);
 	}
 	case WM_KEYDOWN:
@@ -64,7 +64,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 		case VK_DOWN:
 		{
-			CWB = Down(CWB, Window);
+			CWB = Down();
 			InvalidateRect(hWnd, NULL, TRUE);
 			break;
 		}
@@ -72,7 +72,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			if (CWB.NumButton > 0)
 			{
-				CWB = Up(CWB, Window);
+				CWB = Up();
 				InvalidateRect(hWnd, NULL, TRUE);
 			}
 			break;
@@ -82,7 +82,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			if (Window[CWB.NumWindow].Button[CWB.NumButton].Binding != 0)
 			{
-				CWB = Right(CWB, Window);
+				CWB = Right();
 				InvalidateRect(hWnd, NULL, TRUE);
 			}
 			break;
@@ -92,7 +92,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			if (CWB.NumButton == 0 && CWB.NumWindow != 0)
 			{
-				CWB = Left(CWB, Window);
+				CWB = Left();
 				InvalidateRect(hWnd, NULL, TRUE);
 			}
 			break;

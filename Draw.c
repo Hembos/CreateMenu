@@ -1,6 +1,4 @@
 #include "Header.h"
-CurrentWinBut CWB;
-WINDOW* Window;
 
 void DrawMenu(HDC hdc, CurrentWinBut CWB, WINDOW* Window)
 {

@@ -41,7 +41,4 @@ typedef struct
 void SystemClose();
 WINDOW* Reader();
 void DrawMenu(HDC hdc, CurrentWinBut CWB, WINDOW* Window);
-CurrentWinBut Down(CurrentWinBut CWB, WINDOW* Window);
-CurrentWinBut Up(CurrentWinBut CWB, WINDOW* Window);
-CurrentWinBut Right(CurrentWinBut CWB, WINDOW* Window);
-CurrentWinBut Left(CurrentWinBut CWB, WINDOW* Window);
+CurrentWinBut Click(CurrentWinBut CWB, WINDOW* Window, int Number);

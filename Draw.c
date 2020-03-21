@@ -34,9 +34,9 @@ void DrawMenu(HDC hdc, CurrentWinBut CWB, WINDOW* Window)
 	}
 }
 
-CurrentWinBut Down(CurrentWinBut CWB, WINDOW* Window)
+CurrentWinBut Click(CurrentWinBut CWB, WINDOW* Window, int Number)
 {
-	if (CWB.NumButton < Window[CWB.NumWindow].CountButton - 1)
+	if (CWB.NumButton < Window[CWB.NumWindow].CountButton - 1 && Number == 0)
 	{
 		CWB.NumButton++;
 		if (Window[CWB.NumWindow].Button[CWB.NumButton].Binding != 0)
@@ -48,55 +48,52 @@ CurrentWinBut Down(CurrentWinBut CWB, WINDOW* Window)
 			CWB.WinDraws[CWB.k] = -1;
 		}
 	}
-	return CWB;
-}
 
-CurrentWinBut Up(CurrentWinBut CWB, WINDOW* Window)
-{
-	CWB.NumButton--;
-	if (Window[CWB.NumWindow].Button[CWB.NumButton].Binding != 0)
+	if (Number == 1)
+	{
+		CWB.NumButton--;
+		if (Window[CWB.NumWindow].Button[CWB.NumButton].Binding != 0)
+		{
+			CWB.WinDraws[CWB.k] = Window[CWB.NumWindow].Button[CWB.NumButton].Binding;
+		}
+		else
+		{
+			CWB.WinDraws[CWB.k] = -1;
+		}
+	}
+
+	if (Number == 2)
 	{
 		CWB.WinDraws[CWB.k] = Window[CWB.NumWindow].Button[CWB.NumButton].Binding;
+		CWB.NumWindow = Window[CWB.NumWindow].Button[CWB.NumButton].Binding;
+		CWB.NumButton = 0;
+		CWB.k++;
+		if (Window[CWB.NumWindow].Button[CWB.NumButton].Binding != 0)
+		{
+			CWB.WinDraws[CWB.k] = Window[CWB.NumWindow].Button[CWB.NumButton].Binding;
+		}
+		else
+		{
+			CWB.WinDraws[CWB.k] = -1;
+		}
 	}
-	else
-	{
-		CWB.WinDraws[CWB.k] = -1;
-	}
-	return CWB;
-}
 
-CurrentWinBut Right(CurrentWinBut CWB, WINDOW* Window)
-{
-	CWB.WinDraws[CWB.k] = Window[CWB.NumWindow].Button[CWB.NumButton].Binding;
-	CWB.NumWindow = Window[CWB.NumWindow].Button[CWB.NumButton].Binding;
-	CWB.NumButton = 0;
-	CWB.k++;
-	if (Window[CWB.NumWindow].Button[CWB.NumButton].Binding != 0)
+	if (Number == 3)
 	{
-		CWB.WinDraws[CWB.k] = Window[CWB.NumWindow].Button[CWB.NumButton].Binding;
-	}
-	else
-	{
-		CWB.WinDraws[CWB.k] = -1;
-	}
-	return CWB;
-}
-
-CurrentWinBut Left(CurrentWinBut CWB, WINDOW* Window)
-{
-	CWB.WinDraws[CWB.k - 1] = -1;
-	CWB.NumButton = 0;
-	for (int i = 0; Window[CWB.WinDraws[CWB.k - 2]].Button[i].Binding != CWB.NumWindow; i++)
-		CWB.NumButton++;
-	CWB.NumWindow = CWB.WinDraws[CWB.k - 2];
-	CWB.k--;
-	if (Window[CWB.NumWindow].Button[CWB.NumButton].Binding != 0)
-	{
-		CWB.WinDraws[CWB.k] = Window[CWB.NumWindow].Button[CWB.NumButton].Binding;
-	}
-	else
-	{
-		CWB.WinDraws[CWB.k] = -1;
+		CWB.WinDraws[CWB.k - 1] = -1;
+		CWB.NumButton = 0;
+		for (int i = 0; Window[CWB.WinDraws[CWB.k - 2]].Button[i].Binding != CWB.NumWindow; i++)
+			CWB.NumButton++;
+		CWB.NumWindow = CWB.WinDraws[CWB.k - 2];
+		CWB.k--;
+		if (Window[CWB.NumWindow].Button[CWB.NumButton].Binding != 0)
+		{
+			CWB.WinDraws[CWB.k] = Window[CWB.NumWindow].Button[CWB.NumButton].Binding;
+		}
+		else
+		{
+			CWB.WinDraws[CWB.k] = -1;
+		}
 	}
 	return CWB;
 }

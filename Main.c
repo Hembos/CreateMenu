@@ -64,7 +64,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 		case VK_DOWN:
 		{
-			CWB = Down(CWB, Window);
+			CWB = Click(CWB, Window, 0);
 			InvalidateRect(hWnd, NULL, TRUE);
 			break;
 		}
@@ -72,7 +72,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			if (CWB.NumButton > 0)
 			{
-				CWB = Up(CWB, Window);
+				CWB = Click(CWB, Window, 1);
 				InvalidateRect(hWnd, NULL, TRUE);
 			}
 			break;
@@ -82,7 +82,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			if (Window[CWB.NumWindow].Button[CWB.NumButton].Binding != 0)
 			{
-				CWB = Right(CWB, Window);
+				CWB = Click(CWB, Window, 2);
 				InvalidateRect(hWnd, NULL, TRUE);
 			}
 			break;
@@ -92,7 +92,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			if (CWB.NumButton == 0 && CWB.NumWindow != 0)
 			{
-				CWB = Left(CWB, Window);
+				CWB = Click(CWB, Window, 3);
 				InvalidateRect(hWnd, NULL, TRUE);
 			}
 			break;
